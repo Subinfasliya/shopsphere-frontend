@@ -77,4 +77,13 @@ api.interceptors.response.use(
 );
 
 export const getCsrfToken = () => api.get('/auth/csrf');
+
+export const ensureCsrfToken = async () => {
+  const current = readCookie('csrfToken');
+  if (current) return current;
+
+  const response = await getCsrfToken();
+  return response.data?.data?.csrfToken || readCookie('csrfToken');
+};
+
 export default api;

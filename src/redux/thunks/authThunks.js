@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../api/axiosInstance';
+import api, { ensureCsrfToken } from '../../api/axiosInstance';
 
 const errorMessage = (error) => {
   const data = error.response?.data;
@@ -8,6 +8,7 @@ const errorMessage = (error) => {
 
 export const registerUser = createAsyncThunk('auth/register', async (payload, { rejectWithValue }) => {
   try {
+    await ensureCsrfToken();
     const { data } = await api.post('/auth/register', payload);
     return data.data;
   } catch (error) { return rejectWithValue(errorMessage(error)); }
@@ -15,6 +16,7 @@ export const registerUser = createAsyncThunk('auth/register', async (payload, { 
 
 export const loginUser = createAsyncThunk('auth/login', async (payload, { rejectWithValue }) => {
   try {
+    await ensureCsrfToken();
     const { data } = await api.post('/auth/login', payload);
     return data.data;
   } catch (error) { return rejectWithValue(errorMessage(error)); }
