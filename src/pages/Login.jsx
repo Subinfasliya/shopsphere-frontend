@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../redux/thunks/authThunks';
 import { clearAuthError } from '../redux/slices/authSlice';
+import PasswordField from '../components/PasswordField';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const Login = () => {
       {error && <p className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{error}</p>}
       <form onSubmit={submit} className="mt-6 space-y-4">
         <input required type="email" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-3" />
-        <input required minLength={8} type="password" placeholder="Password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-3" />
+        <PasswordField placeholder="Password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
         <button disabled={loading} className="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50">{loading ? 'Signing in...' : 'Login'}</button>
       </form>
       <div className="mt-6 flex items-center justify-between gap-4 text-sm text-slate-500"><Link to="/forgot-password" className="font-semibold text-indigo-600">Forgot password?</Link><span>New here? <Link to="/register" className="font-semibold text-indigo-600">Create an account</Link></span></div>

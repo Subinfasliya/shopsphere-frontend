@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCustomers, fetchCustomerDetails, updateCustomerStatus } from '../../redux/thunks/adminThunks';
 import Loader from '../../components/Loader';
 
-const money = (n) => `₹${Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+const money = (n) => `$${Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export default function CustomerManagement() {
   const dispatch = useDispatch();

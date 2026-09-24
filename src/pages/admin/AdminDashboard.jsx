@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAdminDashboard } from '../../redux/thunks/adminThunks';
 import Loader from '../../components/Loader';
-const money = n => `₹${Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2})}`;
+const money = n => `$${Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 export default function AdminDashboard(){
  const dispatch=useDispatch(); const {stats,loading,error}=useSelector(s=>s.admin); useEffect(()=>{dispatch(fetchAdminDashboard())},[dispatch]);
  if(loading&&!stats) return <Loader label="Loading admin dashboard..."/>;

@@ -6,7 +6,9 @@ import orderReducer from './slices/orderSlice';
 import adminReducer from './slices/adminSlice';
 import wishlistReducer from './slices/wishlistSlice';
 import recommendationReducer from './slices/recommendationSlice';
+import toastMiddleware from './toastMiddleware';
 
 export const store = configureStore({
   reducer: { auth: authReducer, products: productReducer, cart: cartReducer, orders: orderReducer, admin: adminReducer, wishlist: wishlistReducer, recommendations: recommendationReducer },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(toastMiddleware),
 });

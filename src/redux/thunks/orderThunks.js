@@ -26,13 +26,33 @@ export const cancelPaypalOrder = createAsyncThunk('orders/cancelPaypal', async (
   catch (error) { return rejectWithValue(errorMessage(error)); }
 });
 
+export const cancelOrder = createAsyncThunk('orders/cancel', async (orderId, { rejectWithValue }) => {
+  try { const { data } = await api.post(`/orders/${orderId}/cancel`); return data.data; }
+  catch (error) { return rejectWithValue(errorMessage(error)); }
+});
+
+export const confirmDelivery = createAsyncThunk('orders/confirmDelivery', async ({ orderId, otp }, { rejectWithValue }) => {
+  try { const { data } = await api.post(`/orders/${orderId}/confirm-delivery`, { otp }); return data.data; }
+  catch (error) { return rejectWithValue(errorMessage(error)); }
+});
+
+export const requestReturn = createAsyncThunk('orders/requestReturn', async (orderId, { rejectWithValue }) => {
+  try { const { data } = await api.post(`/orders/${orderId}/return-request`); return data.data; }
+  catch (error) { return rejectWithValue(errorMessage(error)); }
+});
+
+export const confirmReturn = createAsyncThunk('orders/confirmReturn', async ({ orderId, otp }, { rejectWithValue }) => {
+  try { const { data } = await api.post(`/orders/${orderId}/return-confirm`, { otp }); return data.data; }
+  catch (error) { return rejectWithValue(errorMessage(error)); }
+});
+
 export const fetchMyOrders = createAsyncThunk('orders/myOrders', async (_, { rejectWithValue }) => {
   try { const { data } = await api.get('/orders/my-orders'); return data.data; }
   catch (error) { return rejectWithValue(errorMessage(error)); }
 });
 
-export const fetchAllOrders = createAsyncThunk('orders/all', async (_, { rejectWithValue }) => {
-  try { const { data } = await api.get('/orders'); return data.data; }
+export const fetchAllOrders = createAsyncThunk('orders/all', async (params = {}, { rejectWithValue }) => {
+  try { const { data } = await api.get('/orders', { params }); return data.data; }
   catch (error) { return rejectWithValue(errorMessage(error)); }
 });
 

@@ -11,6 +11,7 @@ import { fetchWishlist } from './redux/thunks/wishlistThunks';
 import Loader from './components/Loader';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
+import { ToastProvider } from './components/ToastProvider';
 
 const Bootstrap = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const Bootstrap = () => {
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter><ErrorBoundary><Bootstrap /></ErrorBoundary></BrowserRouter>
+      <ToastProvider><BrowserRouter><ErrorBoundary><Bootstrap /></ErrorBoundary></BrowserRouter></ToastProvider>
     </Provider>
   </React.StrictMode>
 );

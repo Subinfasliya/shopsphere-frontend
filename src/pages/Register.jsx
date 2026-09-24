@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../redux/thunks/authThunks';
+import PasswordField from '../components/PasswordField';
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const Register = () => {
       <form onSubmit={submit} className="mt-6 space-y-4">
         <input required minLength={2} placeholder="Full name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-3" />
         <input required type="email" placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-3" />
-        <input required minLength={8} type="password" placeholder="Password (8+ characters)" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="w-full rounded-xl border border-slate-200 px-4 py-3" />
+        <PasswordField placeholder="Password (8+ characters)" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
         <button disabled={loading} className="w-full rounded-xl bg-indigo-600 px-4 py-3 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50">{loading ? 'Creating...' : 'Register'}</button>
       </form>
       <p className="mt-6 text-sm text-slate-500">Already registered? <Link to="/login" className="font-semibold text-indigo-600">Login</Link></p>

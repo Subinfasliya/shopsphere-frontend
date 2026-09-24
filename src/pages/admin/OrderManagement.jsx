@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders, updateOrderStatus } from '../../redux/thunks/orderThunks';
 import Loader from '../../components/Loader';
@@ -6,19 +6,20 @@ import Loader from '../../components/Loader';
 const statuses = ['placed', 'processing', 'shipped', 'delivered', 'cancelled'];
 
 const formatCurrency = (value) =>
-  Number(value || 0).toLocaleString('en-IN', {
+  Number(value || 0).toLocaleString('en-US', {
     style: 'currency',
-    currency: 'INR',
+    currency: 'USD',
     maximumFractionDigits: 2,
   });
 
 const OrderManagement = () => {
   const dispatch = useDispatch();
-  const { allOrders: orders, loading, error } = useSelector((state) => state.orders);
+  const { allOrders: orders, allOrdersPagination: pagination, loading, error } = useSelector((state) => state.orders);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchAllOrders());
-  }, [dispatch]);
+    dispatch(fetchAllOrders({ page, limit: 10 }));
+  }, [dispatch, page]);
 
   if (loading && !orders.length) {
     return <Loader label="Loading orders..." />;
@@ -73,6 +74,7 @@ const OrderManagement = () => {
 
                   <select
                     value={order.orderStatus}
+                    disabled={order.orderStatus === 'cancelled'}
                     onChange={(e) =>
                       dispatch(
                         updateOrderStatus({
@@ -91,6 +93,9 @@ const OrderManagement = () => {
                   </select>
                 </div>
               </div>
+              {order.orderStatus === 'cancelled' && <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-1 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800"><strong>Order cancelled</strong><span>By: {order.cancelledBy === 'user' ? 'Customer' : 'Admin'}</span>{order.cancelledAt && <span>At: {new Date(order.cancelledAt).toLocaleString()}</span>}</div>}
+              {order.orderStatus === 'shipped' && order.deliveryOtpSentAt && <div className="mt-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">Delivery OTP sent. Waiting for customer confirmation.</div>}
+              {order.returnStatus && order.returnStatus !== 'none' && <div className="mt-4 rounded-xl bg-slate-100 px-4 py-3 text-sm capitalize text-slate-700">Return status: {order.returnStatus.replace('_', ' ')}{order.returnConfirmedAt ? ` · confirmed ${new Date(order.returnConfirmedAt).toLocaleString()}` : ''}</div>}
             </div>
 
             {/* Customer shipping information */}
@@ -200,6 +205,7 @@ const OrderManagement = () => {
           No orders.
         </div>
       )}
+      {pagination?.pages > 1 && <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4"><button type="button" disabled={page <= 1 || loading} onClick={() => setPage((current) => current - 1)} className="rounded-lg border px-3 py-2 text-sm font-semibold disabled:opacity-40">Previous</button><span className="text-sm text-slate-500">Page {page} of {pagination.pages} · {pagination.total} active orders</span><button type="button" disabled={page >= pagination.pages || loading} onClick={() => setPage((current) => current + 1)} className="rounded-lg border px-3 py-2 text-sm font-semibold disabled:opacity-40">Next</button></div>}
     </section>
   );
 };
